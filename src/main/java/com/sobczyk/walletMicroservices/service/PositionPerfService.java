@@ -4,7 +4,6 @@ import com.sobczyk.walletMicroservices.dto.PositionPerformanceDto;
 import com.sobczyk.walletMicroservices.dto.requests.PositionPerformanceRequest;
 import com.sobczyk.walletMicroservices.dto.responses.PositionPerformanceResponse;
 import com.sobczyk.walletMicroservices.dto.responses.TransactionResponse;
-import com.sobczyk.walletMicroservices.entity.Investor;
 import com.sobczyk.walletMicroservices.entity.Transaction;
 import com.sobczyk.walletMicroservices.entity.TransactionType;
 import com.sobczyk.walletMicroservices.position.performance.PositionPerfKey;
@@ -12,7 +11,6 @@ import com.sobczyk.walletMicroservices.position.performance.PositionPerfValue;
 import com.sobczyk.walletMicroservices.position.performance.TimeSeries;
 import com.sobczyk.walletMicroservices.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -36,10 +34,10 @@ public class PositionPerfService {
     private PositionPerformanceDto previousPerf;
     private PositionPerformanceResponse response;
 
-    public ResponseEntity<PositionPerformanceResponse> getPositionPerformance(Investor investor, PositionPerformanceRequest request) {
+    public PositionPerformanceResponse getPositionPerformance(PositionPerformanceRequest request) {
         clearVariables();
         TimeSeries timeSeries = TimeSeries.getById(request.timeSeries());
-        transactionRepository.findTransactions(investor.getId())
+        transactionRepository.findTransactions(request.investorId())
                 .forEach(t -> {
                     onTickerChangedAction(timeSeries, t.getAsset().getTicker());
                     populatePositions(t.getAsset().getTicker(), previousPerf.getQuantity(), previousPerf.getInvestedValue(),
@@ -51,12 +49,12 @@ public class PositionPerfService {
         populatePositions(previousPerf.getTicker(), previousPerf.getQuantity(), previousPerf.getInvestedValue(),
                 timeSeries, LocalDate.now().plusDays(1), !this.response.getTransactions().isEmpty());
         this.summarizePortfolio(timeSeries);
-        return ResponseEntity.ok().body(response);
+        return response;
     }
 
     private void setPreviousPerf(Transaction t) {
         previousPerf.setQuantity(afterTransactionQuantityCalc(previousPerf.getQuantity(), t.getTransaction_quantity(), t.getTransactionType()));
-        previousPerf.setInvestedValue(previousPerf.getQuantity().multiply(t.getPurchase_price()).add(t.getTrading_fees() == null ? BigDecimal.ZERO : t.getTrading_fees()));
+        previousPerf.setInvestedValue(previousPerf.getInvestedValue().add(t.getTransaction_quantity().multiply(t.getPurchase_price()).add(t.getTrading_fees() == null ? BigDecimal.ZERO : t.getTrading_fees())));
         previousPerf.setTicker(t.getAsset().getTicker());
     }
 

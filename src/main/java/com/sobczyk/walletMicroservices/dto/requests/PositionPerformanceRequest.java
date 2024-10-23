@@ -1,4 +1,4 @@
 package com.sobczyk.walletMicroservices.dto.requests;
 
-public record PositionPerformanceRequest(Integer timeSeries) {
+public record PositionPerformanceRequest(Long investorId, Integer timeSeries) {
 }

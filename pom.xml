@@ -89,6 +89,10 @@
 			<artifactId>ktor-client-core</artifactId>
 			<version>2.3.10</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
