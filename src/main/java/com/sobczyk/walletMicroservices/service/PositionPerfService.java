@@ -36,8 +36,8 @@ public class PositionPerfService {
 
     public PositionPerformanceResponse getPositionPerformance(PositionPerformanceRequest request) {
         clearVariables();
-        TimeSeries timeSeries = TimeSeries.getById(request.timeSeries());
-        transactionRepository.findTransactions(request.investorId())
+        TimeSeries timeSeries = TimeSeries.getById(request.getTimeSeries());
+        transactionRepository.findTransactions(request.getInvestorId())
                 .forEach(t -> {
                     onTickerChangedAction(timeSeries, t.getAsset().getTicker());
                     populatePositions(t.getAsset().getTicker(), previousPerf.getQuantity(), previousPerf.getInvestedValue(),
@@ -49,6 +49,7 @@ public class PositionPerfService {
         populatePositions(previousPerf.getTicker(), previousPerf.getQuantity(), previousPerf.getInvestedValue(),
                 timeSeries, LocalDate.now().plusDays(1), !this.response.getTransactions().isEmpty());
         this.summarizePortfolio(timeSeries);
+        response.setInvestorDto(request.getInvestorDto());
         return response;
     }
 

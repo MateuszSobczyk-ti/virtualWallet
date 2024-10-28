@@ -1,5 +1,6 @@
 package com.sobczyk.walletMicroservices.dto.responses;
 
+import com.sobczyk.walletMicroservices.dto.InvestorDto;
 import com.sobczyk.walletMicroservices.dto.PositionPerformanceDto;
 import com.sobczyk.walletMicroservices.position.performance.PositionPerfValue;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class PositionPerformanceResponse {
     private PositionPerfValue cash;
     private List<TransactionResponse> transactions;
     private List<FinancialNewsResponse> positionsNews;
+    private InvestorDto investorDto;
 
     public PositionPerformanceResponse() {
         this.allTimePositions = new ArrayList<>();

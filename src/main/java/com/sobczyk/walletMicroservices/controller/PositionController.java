@@ -31,7 +31,7 @@ public class PositionController {
     @GetMapping("/performance")
     public ResponseEntity<PositionPerformanceResponse> getPositionPerformance(@AuthenticationPrincipal Investor investor,
                                                                                     @RequestParam Integer timeSeries) {
-        return ResponseEntity.ok().body(
-                positionPerfService.getPositionPerformance(new PositionPerformanceRequest(investor.getId(), timeSeries)));
+        PositionPerformanceRequest request = new PositionPerformanceRequest(investor.getId(), timeSeries);
+        return ResponseEntity.ok().body(positionPerfService.getPositionPerformance(request));
     }
 }

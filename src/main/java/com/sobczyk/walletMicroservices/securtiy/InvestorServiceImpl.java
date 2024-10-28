@@ -78,6 +78,6 @@ public class InvestorServiceImpl implements InvestorService {
     }
 
     private InvestorDto convertToDto(Investor investor) {
-        return new InvestorDto(investor.getFirstname(),investor.getLastname(), investor.getEmail(), null);
+        return new InvestorDto(investor.getFirstname(),investor.getLastname(), investor.getEmail());
     }
 }
