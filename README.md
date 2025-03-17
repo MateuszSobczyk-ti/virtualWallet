@@ -1,4 +1,4 @@
-# virtualWallet
+# virtual Wallet
 
 ### Application architecture
 ![obraz](https://github.com/user-attachments/assets/cf98222f-4056-40f1-acef-dd727153dfba)
